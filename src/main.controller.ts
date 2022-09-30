@@ -1,0 +1,26 @@
+//src/main.controller.ts
+
+import { PokeService } from "./services/pokemon.service";
+import { Application } from "express";
+
+export class Controller {
+  private pokeService: PokeService;
+
+  constructor(private app: Application) {
+    this.pokeService = new PokeService();
+    this.routes();
+  }
+
+  public routes() {
+    this.app.route("/").get(this.pokeService.welcomeMessage);
+    this.app.route("/pokemons").get(this.pokeService.getAllPokemon);
+    this.app.route("/pokemon").post(this.pokeService.addNewPokemon);
+
+    //Chaining our route
+
+    this.app
+      .route("/pokemon/:id")
+      .delete(this.pokeService.deletePokemon)
+      .put(this.pokeService.updatePokemon);
+  }
+}
